@@ -1,12 +1,14 @@
-[gd_scene load_steps=9 format=3 uid="uid://d5o1d4grc5bm"]
+[gd_scene load_steps=11 format=3 uid="uid://d5o1d4grc5bm"]
 
 [ext_resource type="Script" uid="uid://byb2nmhv20pj0" path="res://node_2d.gd" id="1_wtcfe"]
-[ext_resource type="Texture2D" uid="uid://bjili3srytt8y" path="res://icon.svg" id="2_0e48y"]
 [ext_resource type="Texture2D" uid="uid://bvi3ftlq1immc" path="res://GRAS.png" id="2_0hol4"]
 [ext_resource type="Texture2D" uid="uid://6wxt11pmxteb" path="res://Black.png" id="3_epypp"]
 [ext_resource type="Texture2D" uid="uid://dvnx6tu4sr5u8" path="res://dirt.png" id="5_d21ai"]
 [ext_resource type="Texture2D" uid="uid://d1rvkhc3jgx4t" path="res://images/spike.png" id="6_rj586"]
 [ext_resource type="Texture2D" uid="uid://c1ohuctj43jeg" path="res://images/player.png" id="7_4d7sh"]
+[ext_resource type="Script" uid="uid://ckfedou2hs0rl" path="res://button_2.gd" id="7_d21ai"]
+[ext_resource type="Texture2D" uid="uid://mudg71l62mxp" path="res://images/flag.png" id="7_ir8iy"]
+[ext_resource type="Script" uid="uid://mvp5cr2rmj8n" path="res://leave.gd" id="8_rj586"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_ir8iy"]
 
@@ -20,11 +22,6 @@ z_index = 300
 position = Vector2(-1644, 8997)
 texture = ExtResource("2_0hol4")
 
-[node name="Sprite2D2" type="Sprite2D" parent="."]
-position = Vector2(-32, 33)
-scale = Vector2(0.0078125, 0.5)
-texture = ExtResource("2_0e48y")
-
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 
 [node name="Icon" type="Sprite2D" parent="."]
@@ -37,16 +34,16 @@ texture = ExtResource("3_epypp")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(607, 352)
-rotation = 0.00281464
 
 [node name="Button" type="Button" parent="Camera2D"]
-offset_left = 402.0
-offset_top = -321.0
-offset_right = 570.0
-offset_bottom = -234.0
+offset_left = 407.0
+offset_top = -320.0
+offset_right = 575.0
+offset_bottom = -233.0
 focus_mode = 0
 text = "playbutton
 "
+metadata/_edit_use_anchors_ = true
 
 [node name="TextureRect" type="TextureRect" parent="Camera2D"]
 z_index = 3000
@@ -55,13 +52,17 @@ offset_top = 130.0
 offset_right = 580.0
 offset_bottom = 320.0
 texture = SubResource("CanvasTexture_ir8iy")
+metadata/_edit_use_anchors_ = true
 
 [node name="grass" type="Button" parent="Camera2D/TextureRect"]
+layout_mode = 0
 offset_left = 30.0
 offset_top = 30.0
 offset_right = 484.0
 offset_bottom = 57.0
 scale = Vector2(0.191789, 3.26569)
+focus_mode = 0
+metadata/_edit_use_anchors_ = true
 
 [node name="Gras" type="Sprite2D" parent="Camera2D/TextureRect/grass"]
 position = Vector2(226.812, 13.4734)
@@ -69,11 +70,14 @@ scale = Vector2(7.08787, 0.421044)
 texture = ExtResource("2_0hol4")
 
 [node name="dirt" type="Button" parent="Camera2D/TextureRect"]
+layout_mode = 0
 offset_left = 150.0
 offset_top = 30.0
 offset_right = 604.0
 offset_bottom = 57.0
 scale = Vector2(0.191789, 3.26569)
+focus_mode = 0
+metadata/_edit_use_anchors_ = true
 
 [node name="Dirt" type="Sprite2D" parent="Camera2D/TextureRect/dirt"]
 position = Vector2(226.812, 13.6265)
@@ -81,11 +85,15 @@ scale = Vector2(6.92493, 0.425828)
 texture = ExtResource("5_d21ai")
 
 [node name="spike" type="Button" parent="Camera2D/TextureRect"]
+layout_mode = 0
 offset_left = 270.0
 offset_top = 30.0
 offset_right = 724.0
 offset_bottom = 57.0
 scale = Vector2(0.191789, 3.26569)
+focus_mode = 0
+flat = true
+metadata/_edit_use_anchors_ = true
 
 [node name="Spike" type="Sprite2D" parent="Camera2D/TextureRect/spike"]
 position = Vector2(221.598, 13.3203)
@@ -93,23 +101,60 @@ scale = Vector2(6.92493, 0.425829)
 texture = ExtResource("6_rj586")
 
 [node name="player" type="Button" parent="Camera2D/TextureRect"]
+layout_mode = 0
 offset_left = 390.0
 offset_top = 30.0
 offset_right = 844.0
 offset_bottom = 57.0
 scale = Vector2(0.191789, 3.26569)
+focus_mode = 0
+flat = true
+metadata/_edit_use_anchors_ = true
 
 [node name="Player" type="Sprite2D" parent="Camera2D/TextureRect/player"]
 position = Vector2(226.633, 13.7027)
 scale = Vector2(7.09345, 0.433016)
 texture = ExtResource("7_4d7sh")
 
+[node name="goal" type="Button" parent="Camera2D/TextureRect"]
+layout_mode = 0
+offset_left = 532.0
+offset_top = 32.0
+offset_right = 621.0
+offset_bottom = 125.0
+focus_mode = 0
+flat = true
+
+[node name="Flag" type="Sprite2D" parent="Camera2D/TextureRect/goal"]
+position = Vector2(45, 46)
+scale = Vector2(1.34375, 1.375)
+texture = ExtResource("7_ir8iy")
+
+[node name="Button3" type="Button" parent="Camera2D"]
+offset_left = -576.0
+offset_top = -320.0
+offset_right = -458.0
+offset_bottom = -268.0
+focus_mode = 0
+theme_override_font_sizes/font_size = 31
+text = "save"
+script = ExtResource("7_d21ai")
+metadata/_edit_use_anchors_ = true
+
+[node name="leave" type="Button" parent="Camera2D"]
+offset_left = -458.0
+offset_top = -320.0
+offset_right = -371.0
+offset_bottom = -268.0
+text = "leave"
+script = ExtResource("8_rj586")
+metadata/_edit_use_anchors_ = true
+
 [connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
-[connection signal="mouse_entered" from="Camera2D/Button" to="." method="_on_button_mouse_entered"]
-[connection signal="mouse_exited" from="Camera2D/Button" to="." method="_on_button_mouse_exited"]
 [connection signal="pressed" from="Camera2D/Button" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="Camera2D/TextureRect/grass" to="." method="_on_grass_pressed"]
 [connection signal="pressed" from="Camera2D/TextureRect/dirt" to="." method="_on_dirt_pressed"]
 [connection signal="pressed" from="Camera2D/TextureRect/spike" to="." method="_on_spike_pressed"]
 [connection signal="pressed" from="Camera2D/TextureRect/player" to="." method="_on_player_pressed"]
+[connection signal="pressed" from="Camera2D/TextureRect/goal" to="." method="_on_goal_pressed"]

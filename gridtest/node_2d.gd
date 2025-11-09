@@ -6,26 +6,33 @@ var pressed = false
 var zoom = 0
 var groups = "grassblock"
 var camerapos
-var placed = []
+@export var  placed = []
 var character = preload("res://images/character_body_2d.tscn")
 var oldpos = 0
 var slot1 = preload("res://GRAS.png")
 var slot2 = preload("res://dirt.png")
 var slot3 = preload("res://images/spike.png")
 var playerslot =  preload("res://images/player.png")
+var slot5 = preload("res://images/flag.png")
 var playerspawner = false
 var playertexture = null
 @onready var area = $Area2D 
 @onready var bild =$Sprite2D
 var not_at_playbutton = true
 func _ready() -> void:
+	for i in camera.get_children():
+		if i is Button:
+			i.mouse_entered.connect(mouseenter)
+			i.mouse_exited.connect(mouseexit)
+	loadcurrenlevel()
 	camerapos = camera.position
 	zoom = camera.zoom
 	grid()
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	print(playerspawner)
 	var cursorpos = get_viewport().get_mouse_position()
-	print(cursorpos)
+	
 
 	if pressed == false  and cursorpos.y <= 426	and not_at_playbutton  :
 
@@ -64,9 +71,12 @@ func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("slot3"):
 		groups = "killblock"
 		bild.texture = slot3
-	if Input.is_action_just_pressed("slot4") :
+	if Input.is_action_just_pressed("slot4"):
 		groups = "player"
 		bild.texture = playerslot
+	if Input.is_action_just_pressed("slot5"):
+		groups = "goal"
+		bild.texture = slot5
 	if Input.is_action_pressed("delete"): 
 
 		var pos = round(get_global_mouse_position()/64) * 64
@@ -97,24 +107,23 @@ func _input(event: InputEvent) -> void:
 					if i["block"].position == pos:
 						placed.erase(i)
 						i["block"].queue_free()
-						print(i["block"])
 						break
 		
 				var clone = bild.duplicate()
 				clone.position = pos
 				self.get_node("clone").add_child(clone)
-				placed.append({"block":clone,"groups":groups})
+				placed.append({"block":clone,"groups":groups,"position":clone.position})
 				if groups == "player":
 					playerspawner = true
 			else:
-				if placed[placed.size()-1]["groups"] != groups:
+				if placed[placed.size()-1]["groups"] != groups and (playerspawner == false or groups != "player"):
 					print("kill")
 					var clone = bild.duplicate()
 					clone.position = pos
 					self.get_node("clone").add_child(clone)
 					placed[placed.size()-1]["block"].queue_free()
 					placed.erase(placed[placed.size()-1])
-					placed.append({"block":clone,"groups":groups})
+					placed.append({"block":clone,"groups":groups,"position":clone.position})
 					if groups == "player":
 						playerspawner = true	
 		else:
@@ -122,7 +131,7 @@ func _input(event: InputEvent) -> void:
 			clone.position = pos
 			self.get_node("clone").add_child(clone)
 			
-			placed.append({"block":clone,"groups":groups})
+			placed.append({"block":clone,"groups":groups,"position":clone.position})
 			if groups == "player":
 				playerspawner = true
 	if event is InputEventMouseMotion and Input.is_action_pressed("rightclick") and pressed == false:
@@ -141,6 +150,7 @@ func _input(event: InputEvent) -> void:
 func _on_button_pressed() -> void:
 	var button = $Camera2D/Button
 	if pressed == false and playerspawner == true:
+		camera.get_node("TextureRect").visible = false
 		pressed = true
 		button.text = "reset"
 		print("hi")
@@ -174,9 +184,16 @@ func _on_button_pressed() -> void:
 				collision.scale = Vector2(1,1) 
 				collision.position = i["block"].position
 				area.add_child(collision)
-			else:
-				pass
+			elif i["groups"] == "goal":
+				var collision = CollisionShape2D.new()
+				var shape = RectangleShape2D.new()
+				collision.shape=  shape
+				collision.scale = Vector2(1,1) 
+				collision.position = i["block"].position
+				area.add_child(collision)
 	else:
+		camera.get_node("TextureRect").visible = true
+		camera.get_node("Button").text = "Play"
 		pressed = false
 		camera.reparent(self)
 		for bodys in staticbody.get_children():
@@ -220,10 +237,31 @@ func _on_player_pressed() -> void:
 	groups = "player"
 
 
-func _on_button_mouse_entered() -> void:
+func mouseexit() -> void:
+	not_at_playbutton = true
+func mouseenter() -> void:
 	not_at_playbutton = false
-	
+func loadcurrenlevel()->void:
+	var currentlevel = Savescript.currentlevel
+	for i in Savescript.savedata[currentlevel]:
+		var clone = Sprite2D.new()
+		clone.position = i["position"] 
+		clone.add_to_group(i["groups"])
+		if i["groups"] == "grassblock":
+			clone.texture = slot1
+		elif i["groups"] == "dirtblock":
+			clone.texture = slot2
+		elif i["groups"] == "killblock":
+			clone.texture = slot3
+		elif i["groups"] == "player":
+			playerspawner = true
+			clone.texture = playerslot
+		elif i["groups"] == "goal":
+			clone.texture = slot5
+		
+		self.get_node("clone").add_child(clone)
+		placed.append({"block":clone,"groups":i["groups"],"position":i["position"]})
 
-
-func _on_button_mouse_exited() -> void:
-		not_at_playbutton = true
+func _on_goal_pressed() -> void:
+	bild.texture = slot5
+	groups = "goal"

@@ -6,6 +6,7 @@ var pressed = false
 var zoom = 0
 var groups = "grassblock"
 var camerapos
+@onready var  cursorcheckererror = $Camera2D/TextureRect/cursorchecker
 @export var  placed = []
 var character = preload("res://images/character_body_2d.tscn")
 var oldpos = 0
@@ -20,6 +21,8 @@ var playertexture = null
 @onready var bild =$Sprite2D
 var not_at_playbutton = true
 func _ready() -> void:
+	cursorcheckererror.mouse_entered.connect(mouseenter)
+	cursorcheckererror.mouse_exited.connect(mouseexit)
 	for i in camera.get_children():
 		if i is Button:
 			i.mouse_entered.connect(mouseenter)
@@ -34,7 +37,7 @@ func _process(delta: float) -> void:
 	var cursorpos = get_viewport().get_mouse_position()
 	
 
-	if pressed == false  and cursorpos.y <= 426	and not_at_playbutton  :
+	if pressed == false and not_at_playbutton  :
 
 		bild.visible = true
 		var position1 =  get_global_mouse_position()
@@ -96,7 +99,7 @@ func _input(event: InputEvent) -> void:
 			oldpos = pos
 	
 				
-	if Input.is_action_pressed("place") and pressed == false and cursorpos.y <= 426	and not_at_playbutton  :
+	if Input.is_action_pressed("place") and pressed == false and not_at_playbutton :
 		oldpos = null
 		var pos = bild.position
 		if placed.size() > 0:

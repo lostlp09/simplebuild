@@ -17,16 +17,10 @@ func loadlevel()->void:
 		var content = file.get_var()
 		file.close
 		savedata = content
-	
-						
-					
-
-		
 	if file != null:
 		pass	
 	else:
 		savedata = []
 
-	
 
   

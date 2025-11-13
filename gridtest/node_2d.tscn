@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://d5o1d4grc5bm"]
+[gd_scene load_steps=12 format=3 uid="uid://d5o1d4grc5bm"]
 
 [ext_resource type="Script" uid="uid://byb2nmhv20pj0" path="res://node_2d.gd" id="1_wtcfe"]
 [ext_resource type="Texture2D" uid="uid://bvi3ftlq1immc" path="res://GRAS.png" id="2_0hol4"]
@@ -11,6 +11,9 @@
 [ext_resource type="Script" uid="uid://mvp5cr2rmj8n" path="res://leave.gd" id="8_rj586"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_ir8iy"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4d7sh"]
+size = Vector2(1159.5, 206)
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_wtcfe")
@@ -129,6 +132,13 @@ flat = true
 position = Vector2(45, 46)
 scale = Vector2(1.34375, 1.375)
 texture = ExtResource("7_ir8iy")
+
+[node name="cursorchecker" type="Area2D" parent="Camera2D/TextureRect"]
+position = Vector2(-27, -482)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Camera2D/TextureRect/cursorchecker"]
+position = Vector2(608, 567)
+shape = SubResource("RectangleShape2D_4d7sh")
 
 [node name="Button3" type="Button" parent="Camera2D"]
 offset_left = -576.0
